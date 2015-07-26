@@ -7,15 +7,28 @@ UnitedRectangles::UnitedRectangles(void)
 QTextStream & operator >> (QTextStream & in, Rectangle & other)
 {
 	in >> other.x >> other.y >> other.length >> other.width;
-
 	return in;
 }
 
 QTextStream & operator << (QTextStream & out, const QPoint & other)
 {
 	out << "(" << other.x() << other.y() << ")";
-
 	return out;
+}
+
+QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
+{
+	// Получить вершины первого прямоугольника
+	QVector <QPoint> tops;
+	QPoint first, second, third, fourth;
+
+	first = QPoint::QPoint (it.x, it.y);
+	second = QPoint::QPoint (it.x + it.length, it.y);
+	third = QPoint::QPoint (it.x, it.y + it.width);
+	fourth = QPoint::QPoint (it.x + it.length, it.y + it.width);
+
+	tops << first << second << third << fourth;
+	return tops;
 }
 
 QVector <Rectangle> UnitedRectangles::readData ()
@@ -41,6 +54,8 @@ QVector <Rectangle> UnitedRectangles::readData ()
 	return data;
 }
 
+
+#ifdef EASY
 Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangles)
 {
 	Rectangle result;
@@ -120,6 +135,17 @@ Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangle
 	return result;
 }
 
+void UnitedRectangles::writeResultEasy (Rectangle & figure)
+{
+	QFile File ("result.txt");	// Привязать файл к его имени
+	if (File.open(QIODevice::WriteOnly | QIODevice::Truncate))	// Открыть файл для записи
+	{
+		QTextStream Out(&File);	// Создать поток
+		Out << figure.x << " " << figure.y << " " << figure.length << " " << figure.width;
+		File.close();			// Закрыть файл
+	}
+}
+#else
 QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> & rectangles)
 {
 	QVector<QVector<QPoint>> figures;
@@ -141,21 +167,6 @@ QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> 
 	}
 
 	return figures;
-}
-
-QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
-{
-	// Получить вершины первого прямоугольника
-	QVector <QPoint> tops;
-	QPoint first, second, third, fourth;
-
-	first = QPoint::QPoint (it.x, it.y);
-	second = QPoint::QPoint (it.x + it.length, it.y);
-	third = QPoint::QPoint (it.x, it.y + it.width);
-	fourth = QPoint::QPoint (it.x + it.length, it.y + it.width);
-
-	tops << first << second << third << fourth;
-	return tops;
 }
 
 QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rectangle first, int current, Rectangle other, int second)
@@ -294,6 +305,8 @@ void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
 		File.close();	// Закрыть файл
 	}
 }
+
+#endif
 
 UnitedRectangles::~UnitedRectangles(void)
 {

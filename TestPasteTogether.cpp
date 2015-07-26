@@ -4,6 +4,7 @@
 #include <QPoint>
 #include <QList>
 
+#ifndef EASY
 TestPasteTogether::TestPasteTogether(void)
 {
 }
@@ -209,3 +210,4 @@ void TestPasteTogether::ifConcurWitnOther (void)
 TestPasteTogether::~TestPasteTogether(void)
 {
 }
+#endif

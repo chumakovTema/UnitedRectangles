@@ -1,6 +1,7 @@
 #include "TestPasteAllTogether.h"
 #include "UnitedRectangles.h"
 
+#ifndef EASY
 TestPasteAllTogether::TestPasteAllTogether(void)
 {
 }
@@ -125,3 +126,4 @@ void TestPasteAllTogether::ifSevenRectangles (void)
 TestPasteAllTogether::~TestPasteAllTogether(void)
 {
 }
+#endif

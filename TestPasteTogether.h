@@ -12,10 +12,12 @@ public:
 	~TestPasteTogether(void);
 
 	private slots:
+#ifndef EASY
 		void ifContactOneEdge (void);
 		void ifCrossOneEdge (void);
 		void ifCrossCorner (void);
 		void ifCrossTwoOppositeEdges (void);
 		void ifContactOneInOther (void);
 		void ifConcurWitnOther (void);
+#endif
 };

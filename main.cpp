@@ -22,15 +22,26 @@ int main(int argc, char *argv[])
 	return 0;
 #endif
 
-	UnitedRectangles app;	// Открыть доступ к методам класса задачи
-	QVector<Rectangle> rectangles;		// Вектор многоугольников - вход
-	QVector<QVector<QPoint>> result;	// Вектор фигур - результат
+	UnitedRectangles app;			// Открыть доступ к методам класса задачи
+	QVector<Rectangle> rectangles;	// Вектор многоугольников - вход
+
+#ifdef EASY
+	Rectangle resultEasy;		// Конечный прямоугольник - результат
+
+	rectangles = app.readData ();		// Считать многоугольники из файла
+	resultEasy = app.pasteAllTogetherEasy (rectangles);	// Склеить все прямоугольники в один
+	app.writeResultEasy (resultEasy);	// Записать результат в файл
+
+	return 0;
+#endif
+	
+#ifdef HARD
+	QVector<QVector<QPoint>> result;// Вектор фигур - результат
 
 	rectangles = app.readData ();	// Считать многоугольники из файла
-
 	result = app.pasteAllTogether (rectangles);	// Получить список объединённых прямоугольников
-
 	app.writeResult (result);		// Записать результат в файл
 
 	return 0;
+#endif
 }

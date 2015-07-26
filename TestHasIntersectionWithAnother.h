@@ -12,6 +12,7 @@ public:
 	~TestHasIntersectionWithAnother(void);
 
 	private slots:
+#ifndef EASY
 		void ifNoContactAndOneOutOfOther (void);
 		void ifNoContactAndOneInOther (void);
 		void ifContactOneTop (void);
@@ -23,4 +24,5 @@ public:
 		void ifContactAndOneInOtherAndBothDimensionsLess (void);
 		void ifContactTwoOppositeEdgesAndOneInOther (void);
 		void ifConcurWitnOther (void);
+#endif
 };

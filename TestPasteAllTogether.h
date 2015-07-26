@@ -12,9 +12,11 @@ public:
 	~TestPasteAllTogether(void);
 
 	private slots:
+#ifndef EASY
 		void ifNoContact (void);
 		void ifIsContact (void);
 		void ifIsIntersection (void);
 		void ifTwoHavesIntersectionsAndThirdHaveNot (void);
 		void ifSevenRectangles (void);
+#endif
 };

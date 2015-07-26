@@ -1,6 +1,7 @@
 #include "TestHasIntersectionWithAnother.h"
 #include "UnitedRectangles.h"
 
+#ifndef EASY
 TestHasIntersectionWithAnother::TestHasIntersectionWithAnother(void)
 {
 }
@@ -281,3 +282,4 @@ void TestHasIntersectionWithAnother::ifConcurWitnOther (void)
 TestHasIntersectionWithAnother::~TestHasIntersectionWithAnother(void)
 {
 }
+#endif

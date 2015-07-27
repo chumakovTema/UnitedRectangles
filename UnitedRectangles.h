@@ -1,3 +1,6 @@
+//!
+//! \file UnitedRectangles.h
+//!
 #pragma once
 #include <QVector>
 #include <QList>
@@ -7,25 +10,65 @@
 #include "Rectangle.h"
 #include "Intersection.h"
 
+/*!
+* class UnitedRectangles
+* Рабочий класс
+*/
 class UnitedRectangles
 {
 public:
 	UnitedRectangles(void);
 	~UnitedRectangles(void);
 
-	QVector <Rectangle> readData ();		// Чтение данных из файла
-	QVector<QPoint> getTops (Rectangle it);	// Получение координат всех вершин прямоугольника
+	//!
+	//! Чтение данных из файла
+	//!
+	QVector <Rectangle> readData ();
 
-#ifdef EASY	// Компиляция лёгкого решения
-	Rectangle pasteAllTogetherEasy (QVector<Rectangle> & rectangles);	// Склейка прямоугольников в один
-	void writeResultEasy (Rectangle & figure);							// Запись данных в файл
+	//!
+	//! Получение координат всех вершин прямоугольника
+	//!
+	QVector<QPoint> getTops (Rectangle it);
+
+#ifdef SPLICE_RECTANGLES_EASY_VERSION	// Компиляция лёгкого решения
+	//!
+	//! Склейка прямоугольников в один
+	//!
+	Rectangle pasteAllTogetherEasy (QVector<Rectangle> & rectangles);
+
+	//!
+	//! Запись данных в файл
+	//!
+	void writeResultEasy (Rectangle & figure);
 #else		// Компиляция сложного решения, режима отладки или тестового режима
+	//!
+	//! Склейка прямоугольников в одну фигуру
+	//!
 	QVector<QVector<QPoint>> pasteAllTogether (QVector<Rectangle> & rectangles);
+
+	//!
+	//! Получение карты пересечений прямоугольников
+	//!
 	QVector<QVector<Intersection>> hasIntersectionWithAhother (Rectangle first, int num1, Rectangle other, int num2);
+
+	//!
+	//! Склейка двух прямоугольников
+	//!
 	QVector<QVector<QPoint>> pasteTogether (QVector<QVector<Intersection>> & intersections, const int count);
-	void writeResult (QVector<QVector<QPoint>> & figures);			// Запись данных в файл
+
+	//!
+	//! Запись данных в файл
+	//!
+	void writeResult (QVector<QVector<QPoint>> & figures);
 #endif
 };
 
+//!
+//! Перегруженная операция чтения из текстового потока
+//!
 QTextStream & operator >> (QTextStream & in, Rectangle & other);
+
+//!
+//! Перегруженная операция записи в текстовый поток
+//!
 QTextStream & operator << (QTextStream & out, const QPoint & other);

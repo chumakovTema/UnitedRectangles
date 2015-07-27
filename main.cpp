@@ -1,3 +1,6 @@
+//!
+//! \file main.cpp
+//!
 #include <QtCore/QCoreApplication>
 #include <QtTest/QtTest>
 #include "UnitedRectangles.h"
@@ -5,10 +8,20 @@
 #include "TestPasteTogether.h"
 #include "TestPasteAllTogether.h"
 
+/*!
+* \fn int main(int argc, char *argv[])
+* Главная функция
+* \param [in] argc - количество аргументов командной строки
+* \param [in] argv - аргументы командной строки в виде строк
+* \return код завершения программы
+*/
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
 
+//!
+//! TEST - макрос, открывающий доступ к модульному тестированию.
+//!
 #ifdef TEST
 	TestHasIntersectionWithAnother first;
 	QTest::qExec (&first);
@@ -23,20 +36,21 @@ int main(int argc, char *argv[])
 #endif
 
 	UnitedRectangles app;			// Открыть доступ к методам класса задачи
-	QVector<Rectangle> rectangles;	// Вектор многоугольников - вход
+	QVector<Rectangle> rectangles;	/**< QVector<Rectangle> rectangles - Вектор многоугольников - вход */
 
-#ifdef EASY
-	Rectangle resultEasy;		// Конечный прямоугольник - результат
+//!
+//! SPLICE_RECTANGLES_EASY_VERSION - макрос, открывающий или закрывающий доступ к облегчённому варианту решения
+//!
+#ifdef SPLICE_RECTANGLES_EASY_VERSION
+	Rectangle resultEasy;		/**< Rectangle resultEasy - Конечный прямоугольник - результат */
 
 	rectangles = app.readData ();		// Считать многоугольники из файла
 	resultEasy = app.pasteAllTogetherEasy (rectangles);	// Склеить все прямоугольники в один
 	app.writeResultEasy (resultEasy);	// Записать результат в файл
 
 	return 0;
-#endif
-	
-#ifdef HARD
-	QVector<QVector<QPoint>> result;// Вектор фигур - результат
+#else
+	QVector<QVector<QPoint>> result;/**< QVector<QVector<QPoint>> - Вектор фигур - результат */
 
 	rectangles = app.readData ();	// Считать многоугольники из файла
 	result = app.pasteAllTogether (rectangles);	// Получить список объединённых прямоугольников

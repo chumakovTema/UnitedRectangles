@@ -1,21 +1,56 @@
+//!
+//! \file UnitedRectangles.cpp
+//!
 #include "UnitedRectangles.h"
 
+/*!
+* \fn UnitedRectangles::UnitedRectangles(void)
+* Конструктор по умолчанию
+*/
 UnitedRectangles::UnitedRectangles(void)
 {
 }
 
+/*!
+* \fn UnitedRectangles::~UnitedRectangles(void)
+* Деструктор по умолчанию
+*/
+UnitedRectangles::~UnitedRectangles(void)
+{
+}
+
+/*!
+* \fn QTextStream & operator >> (QTextStream & in, Rectangle & other)
+* Перегруженная операция чтения из текстового потока
+* \param [in, out] in - ссылка на поток
+* \param [in, out] other - ссылка на объект, который читается из потока
+* \return ссылка на поток
+*/
 QTextStream & operator >> (QTextStream & in, Rectangle & other)
 {
 	in >> other.x >> other.y >> other.length >> other.width;
 	return in;
 }
 
+/*!
+* \fn QTextStream & operator << (QTextStream & out, const QPoint & other)
+* Перегруженная операция записи в текстовый поток
+* \param [in, out] out - ссылка на поток
+* \param [in, out] other - ссылка на объект, который записывается в поток
+* \return ссылка на поток
+*/
 QTextStream & operator << (QTextStream & out, const QPoint & other)
 {
 	out << "(" << other.x() << other.y() << ")";
 	return out;
 }
 
+/*!
+* \fn QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
+* Получение координат всех вершин прямоугольника
+* \param [in] it - прямоугольник, для которого ищем вершины
+* \return вектор вершин
+*/
 QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
 {
 	// Получить вершины первого прямоугольника
@@ -31,9 +66,14 @@ QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
 	return tops;
 }
 
+/*!
+* \fn QVector <Rectangle> UnitedRectangles::readData ()
+* Чтение данных из файла
+* \return вектор прямоугольников
+*/
 QVector <Rectangle> UnitedRectangles::readData ()
 {
-	QVector <Rectangle> data;
+	QVector <Rectangle> data;	/**< QVector <Rectangle> data - Считанные денные */
 	int count = 0;
 
 	QFile file ("target.txt");			// Связать файл с его именем
@@ -42,10 +82,10 @@ QVector <Rectangle> UnitedRectangles::readData ()
 		QTextStream In (&file);		// Создать файловый поток
 		In >> count;				// Считать количество прямоугольников
 
-		for (int i = 1; i < count; i++)	// Считать каждый прямоугольник
+		for (int i = 0; i < count; i++)	// Считать каждый прямоугольник
 		{
-			Rectangle temp;
-			In >> temp;
+			Rectangle temp;		// Временный прямоугольник
+			In >> temp;			// Читаем его из файла
 			data.append(temp);	// Добавить прямоугольник в вектор
 		}
 		file.close();			// Закрыть файл
@@ -54,20 +94,28 @@ QVector <Rectangle> UnitedRectangles::readData ()
 	return data;
 }
 
-
-#ifdef EASY
+//!
+//! SPLICE_RECTANGLES_EASY_VERSION - макрос, открывающий или закрывающий доступ к облегчённому варианту решения
+//!
+#ifdef SPLICE_RECTANGLES_EASY_VERSION
+/*!
+* \fn Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangles)
+* Объединение всех прямоугольников в один новый
+* \param [in] rectangles - ссылка на вектор прямоугольников
+* \return новый прямоугольников
+*/
 Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangles)
 {
-	Rectangle result;
+	Rectangle result;	/**< Rectangle result - полученный новый прямоугольник */
 
-	QVector <QPoint> points;
-	QPoint A = QPoint::QPoint(rectangles.at(0).x, rectangles.at(0).y);
-	QPoint B = QPoint::QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y);
-	QPoint C = QPoint::QPoint(rectangles.at(0).x, rectangles.at(0).y + rectangles.at(0).width);
-	QPoint D = QPoint::QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y + rectangles.at(0).width);
+	QVector <QPoint> points;	// Вектор вершин нового прямоугольника
+	QPoint A = QPoint::QPoint(rectangles.at(0).x, rectangles.at(0).y);	// Левая нижняя вершина
+	QPoint B = QPoint::QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y);// Правая нижняя вершина
+	QPoint C = QPoint::QPoint(rectangles.at(0).x, rectangles.at(0).y + rectangles.at(0).width);	// Левая верхняя вершина
+	QPoint D = QPoint::QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y + rectangles.at(0).width);	// Правая верхняя вершина
 
-	for (int i = 0; i < rectangles.count(); i++)
-	{
+	for (int i = 0; i < rectangles.count(); i++)	// Рассматривая каждый прямоугольник...
+	{	// Определить, где будут вершины нового прямоугольника
 		if (rectangles.at(i).x < A.x())
 		{
 			A.setX(rectangles.at(i).x);
@@ -102,13 +150,13 @@ Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangle
 		}
 	}
 
-	points << A << B << C << D;
+	points << A << B << C << D;	// Записать полученные вершины в вектор
 	int Xmin = 0;
 	int Ymin = 0;
 	int Xmax = 0;
 	int Ymax = 0;
 	for (int i = 0; i < 4; i++)
-	{
+	{	// Выровнять стороны прямоугольника
 		if (points.at(i).x() < Xmin)
 		{
 			Xmin = points.at(i).x();
@@ -135,6 +183,11 @@ Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangle
 	return result;
 }
 
+/*!
+* \fn void UnitedRectangles::writeResultEasy (Rectangle & figure)
+* Запись результата в файл при облегчённом решении
+* \param [in] figure - ссылка на прямоугольник
+*/
 void UnitedRectangles::writeResultEasy (Rectangle & figure)
 {
 	QFile File ("result.txt");	// Привязать файл к его имени
@@ -146,12 +199,18 @@ void UnitedRectangles::writeResultEasy (Rectangle & figure)
 	}
 }
 #else
+/*!
+* \fn QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> & rectangles)
+* Объединение всех прямоугольников в одну новую фигуру
+* \param [in] rectangles - ссылка на вектор прямоугольников
+* \return вектор полученных фигур
+*/
 QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> & rectangles)
 {
-	QVector<QVector<QPoint>> figures;
+	QVector<QVector<QPoint>> figures;	/**< QVector<QVector<QPoint>> figures - Вектор фигур, результат */
 
-	int count = rectangles.count();
-	QVector<QVector<Intersection>> intersections;
+	int count = rectangles.count();	// Получить количество прямоугольников
+	QVector<QVector<Intersection>> intersections;	/**< QVector<QVector<Intersection>> intersections - Карта пересечений прямоугольников */
 
 	for (int i = 0; i < count; i++)	// Для каждого прямоугольника...
 	{
@@ -169,10 +228,19 @@ QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> 
 	return figures;
 }
 
+/*!
+* \fn QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rectangle first, int current, Rectangle other, int second)
+* Составление карты пересечений прямоугольников
+* \param [in] first - первый прямоугольник
+* \param [in] current - его индекс в списке прямоугольников
+* \param [in] other - второй прямоугольник
+* \param [in] second - его индекс в списке прямоугольников
+* \return карта пересечений прямоугольников
+*/
 QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rectangle first, int current, Rectangle other, int second)
 {
-	QVector<QVector<Intersection>> map;	// Карта пересечений
-	QVector<Intersection> line;
+	QVector<QVector<Intersection>> map;	/**< QVector<QVector<Intersection>> map - Карта пересечений */
+	QVector<Intersection> line;		// Строка в карте
 
 	QVector <QPoint> firstRec;
 	QVector <QPoint> secondRec;
@@ -180,7 +248,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 	secondRec = getTops (other);	// Получить вершины второго прямоугольника
 
 	// Проверка пересечения
-	if ((secondRec.at(0).x() > firstRec.at(0).x() && secondRec.at(0).y() > firstRec.at(0).y()) && (secondRec.at(3).x() < firstRec.at(3).x() && secondRec.at(3).y() < firstRec.at(3).y())) // Второй внутри первого
+	if ((secondRec[0].x() > firstRec[0].x() && secondRec[0].y() > firstRec[0].y()) && (secondRec[3].x() < firstRec[3].x() && secondRec[3].y() < firstRec[3].y())) // Второй внутри первого
 	{
 		Intersection temp;
 		temp.baseIndex = current;
@@ -191,7 +259,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		line << temp;
 		map << line;
 	}
-	else if (secondRec.at(0).x() > firstRec.at(1).x() || secondRec.at(0).y() > firstRec.at(3).y() || secondRec.at(3).x() < firstRec.at(0).x() || secondRec.at(3).y() < firstRec.at(0).y())	// Второй вне первого
+	else if (secondRec[0].x() > firstRec[1].x() || secondRec[0].y() > firstRec[3].y() || secondRec[3].x() < firstRec[0].x() || secondRec[3].y() < firstRec[0].y())	// Второй вне первого
 	{
 		Intersection temp;
 		temp.baseIndex = current;
@@ -202,57 +270,57 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		line << temp;
 		map << line;
 	}
-	else if (secondRec.at(0) == firstRec.at(0) && other.length < first.length && other.width < first.width) // Левые нижние углы соприкасаются
+	else if (secondRec[0] == firstRec[0] && other.length < first.length && other.width < first.width) // Левые нижние углы соприкасаются
 	{
 		Intersection temp;
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec.at(0).x(), firstRec.at(0).y()) << QPoint::QPoint(secondRec.at(1).x(), firstRec.at(0).y()) << QPoint::QPoint(firstRec.at(0).x(), secondRec.at(2).y());
+		temp.intersection << QPoint::QPoint(firstRec[0].x(), firstRec[0].y()) << QPoint::QPoint(secondRec[1].x(), firstRec[0].y()) << QPoint::QPoint(firstRec[0].x(), secondRec[2].y());
 
 		line << temp;
 		map << line;
 	}
-	else if (secondRec.at(1) == firstRec.at(1) && other.length < first.length && other.width < first.width) // Правые нижние углы соприкасаются
+	else if (secondRec[1] == firstRec[1] && other.length < first.length && other.width < first.width) // Правые нижние углы соприкасаются
 	{
 		Intersection temp;
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(secondRec.at(0).x(), firstRec.at(1).y()) << QPoint::QPoint(firstRec.at(1).x(), firstRec.at(1).y()) << QPoint::QPoint(firstRec.at(1).x(), secondRec.at(3).y());
+		temp.intersection << QPoint::QPoint(secondRec[0].x(), firstRec[1].y()) << QPoint::QPoint(firstRec[1].x(), firstRec[1].y()) << QPoint::QPoint(firstRec[1].x(), secondRec[3].y());
 
 		line << temp;
 		map << line;
 	}
-	else if (secondRec.at(2) == firstRec.at(2) && other.length < first.length && other.width < first.width) // Левые верхние углы соприкасаются
+	else if (secondRec[2] == firstRec[2] && other.length < first.length && other.width < first.width) // Левые верхние углы соприкасаются
 	{
 		Intersection temp;
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec.at(2).x(), secondRec.at(0).y()) << QPoint::QPoint(firstRec.at(2).x(), firstRec.at(2).y()) << QPoint::QPoint(secondRec.at(3).x(), firstRec.at(2).y());
+		temp.intersection << QPoint::QPoint(firstRec[2].x(), secondRec[0].y()) << QPoint::QPoint(firstRec[2].x(), firstRec[2].y()) << QPoint::QPoint(secondRec[3].x(), firstRec[2].y());
 
 		line << temp;
 		map << line;
 	}
-	else if (secondRec.at(3) == firstRec.at(3) && other.length < first.length && other.width < first.width) // Правые верхние углы соприкасаются
+	else if (secondRec[3] == firstRec[3] && other.length < first.length && other.width < first.width) // Правые верхние углы соприкасаются
 	{
 		Intersection temp;
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec.at(3).x(), secondRec.at(1).y()) << QPoint::QPoint(secondRec.at(2).x(), firstRec.at(3).y()) << QPoint::QPoint(firstRec.at(3).x(), firstRec.at(3).y());
+		temp.intersection << QPoint::QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint::QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint::QPoint(firstRec[3].x(), firstRec[3].y());
 
 		line << temp;
 		map << line;
 	}
-	else if (secondRec.at(0).x() == firstRec.at(0).x() && secondRec.at(0).y() > firstRec.at(0).y() && other.length == first.length && other.width < (first.width - (secondRec.at(0).y() - firstRec.at(0).y()) - (firstRec.at(3).y() - secondRec.at(3).y()))) // Правые верхние углы соприкасаются
+	else if (secondRec[0].x() == firstRec[0].x() && secondRec[0].y() > firstRec[0].y() && other.length == first.length && other.width < (first.width - (secondRec[0].y() - firstRec[0].y()) - (firstRec[3].y() - secondRec[3].y()))) // Правые верхние углы соприкасаются
 	{
 		Intersection temp;
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec.at(3).x(), secondRec.at(1).y()) << QPoint::QPoint(secondRec.at(2).x(), firstRec.at(3).y()) << QPoint::QPoint(firstRec.at(3).x(), firstRec.at(3).y());
+		temp.intersection << QPoint::QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint::QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint::QPoint(firstRec[3].x(), firstRec[3].y());
 
 		line << temp;
 		map << line;
@@ -261,18 +329,25 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 	return map;
 }
 
+/*!
+* \fn QVector<QVector<QPoint>> UnitedRectangles::pasteTogether (QVector<QVector<Intersection>> & intersections, const int count)
+* Склейка двух прямоугольников
+* \param [in] intersections - ссылка на карту пересечений
+* \param [in] count - количество прямоугольников
+* \return вектор фигур
+*/
 QVector<QVector<QPoint>> UnitedRectangles::pasteTogether (QVector<QVector<Intersection>> & intersections, const int count)
 {
-	QVector<QVector<QPoint>> figures;
+	QVector<QVector<QPoint>> figures;	/**< QVector<QVector<QPoint>> figures - Вектор фигур, результат */
 
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < count; i++)		// Для каждого прямоугольника
 	{
-		int size = intersections.at(i).count();
-		for (int j = 0; j < size; j++)
+		int size = intersections[i].count();// Получить длину строки карты
+		for (int j = 0; j < size; j++)		// Для каждого элемента карты...
 		{
-			if (intersections.at(i).at(j).sign == true)
+			if (intersections[i][j].sign == true)	// Если прямоугольники пересекаются или соприкасаются...
 			{
-				// Склеить прямоугольники
+				// Склеить их
 			}
 		}
 	}
@@ -280,6 +355,11 @@ QVector<QVector<QPoint>> UnitedRectangles::pasteTogether (QVector<QVector<Inters
 	return figures;
 }
 
+/*!
+* \fn void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
+* Запись полученных фигур в файл
+* \param [in] figures - ссылка на вектор полученных фигур
+*/
 void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
 {
 	QFile File ("result.txt");	// Привязать файл к его имени
@@ -295,9 +375,9 @@ void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
 		for (int i = 0; i < first; i++)	// Для каждого элемента внешнего вектора
 		{
 			second = figures.at(i).count();	// Получить длину внутреннего вектора
-			for (int j = 0; j < second; j++)	// Для каждого элемента внутреннего вектора...
+			for (int j = 0; j < second; j++)// Для каждого элемента внутреннего вектора...
 			{
-				Out << figures.at(i).at(j);	// Записать точку в поток
+				Out << figures[i][j];	// Записать точку в поток
 				Out << " ";
 			}
 			Out << "\r\n" << "\r\n";
@@ -307,7 +387,3 @@ void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
 }
 
 #endif
-
-UnitedRectangles::~UnitedRectangles(void)
-{
-}

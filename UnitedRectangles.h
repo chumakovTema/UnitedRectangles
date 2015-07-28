@@ -30,6 +30,16 @@ public:
 	//!
 	QVector<QPoint> getTops (Rectangle it);
 
+	//!
+	//! Проверка диапазона входных данных
+	//!
+	int correctInput (QVector <Rectangle> & rectangles);
+
+	//!
+	//! Проверка диапазона выходных данных
+	//!
+	int correctOutput (Rectangle  & figure);
+
 #ifdef SPLICE_RECTANGLES_EASY_VERSION	// Компиляция лёгкого решения
 	//!
 	//! Склейка прямоугольников в один

@@ -3,6 +3,10 @@
 //!
 #include "UnitedRectangles.h"
 
+//!
+//! SPLICE_RECTANGLES_EASY_VERSION - макрос, открывающий или закрывающий доступ к облегчённому варианту решения
+//!
+
 /*!
 * \fn UnitedRectangles::UnitedRectangles(void)
 * Конструктор по умолчанию
@@ -74,6 +78,7 @@ QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
 QVector <Rectangle> UnitedRectangles::readData ()
 {
 	QVector <Rectangle> data;	/**< QVector <Rectangle> data - Считанные денные */
+	QTextStream out (stdout);
 	int count = 0;
 
 	QFile file ("target.txt");			// Связать файл с его именем
@@ -81,6 +86,11 @@ QVector <Rectangle> UnitedRectangles::readData ()
 	{
 		QTextStream In (&file);		// Создать файловый поток
 		In >> count;				// Считать количество прямоугольников
+		if (count == 0)
+		{
+			out << "Ошибка! В файле нет прямоугольников, или их количество не указано!" << flush;
+			return data;
+		}
 
 		for (int i = 0; i < count; i++)	// Считать каждый прямоугольник
 		{
@@ -94,9 +104,84 @@ QVector <Rectangle> UnitedRectangles::readData ()
 	return data;
 }
 
-//!
-//! SPLICE_RECTANGLES_EASY_VERSION - макрос, открывающий или закрывающий доступ к облегчённому варианту решения
-//!
+/*!
+* \fn int UnitedRectangles::correctInput (QVector <Rectangle> & rectangles)
+* Проверка корректности входных данных
+* \param [in] rectangles - ссылка на вектор прямоугольников
+* \return код ошибки
+*/
+int UnitedRectangles::correctInput (QVector <Rectangle> & rectangles)
+{
+	int count = rectangles.count();
+	QTextStream out (stdout);
+
+	for (int i = 0; i < count; i++)
+	{
+		if (rectangles[i].x > 10000 || rectangles[i].x < -10000)
+		{
+			out << "Ошибка! Координата-абсцисса базовой точки прямоугольника " << i << " равна " << rectangles[i].x << flush;
+			out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
+			return 1;
+		}
+		if (rectangles[i].y > 10000 || rectangles[i].y < -10000)
+		{
+			out << "Ошибка! Координата-ордината базовой точки прямоугольника " << i << " равна " << rectangles[i].y << flush;
+			out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
+			return 2;
+		}
+		if (rectangles[i].length > 10000)
+		{
+			out << "Ошибка! Длина прямоугольника " << i << " больше 10000" << flush;
+			return 3;
+		}
+		if (rectangles[i].width > 10000)
+		{
+			out << "Ошибка! Ширина прямоугольника " << i << " больше 10000" << flush;
+			return 4;
+		}
+	}
+
+	return 0;
+}
+
+/*!
+* \fn int UnitedRectangles::correctOutput (Rectangle & figure)
+* Проверка корректности выходных данных
+* \param [in] figure - ссылка на новый прямоугольник
+* \return код ошибки
+*/
+int UnitedRectangles::correctOutput (Rectangle & figure)
+{
+	QTextStream out (stdout);
+
+	if (figure.x > 10000 || figure.x < -10000)
+	{
+		out << "Ошибка! Координата-абсцисса базовой точки нового прямоугольника равна " << figure.x << flush;
+		out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
+		out << "Убедитесь в правильности введённых входных данных" << flush;
+		return 1;
+	}
+	if (figure.y > 10000 || figure.y < -10000)
+	{
+		out << "Ошибка! Координата-ордината базовой точки нового прямоугольника равна " << figure.y << flush;
+		out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
+		out << "Убедитесь в правильности введённых входных данных" << flush;
+		return 2;
+	}
+	if (figure.length > 10000)
+	{
+		out << "Ошибка! Длина нового прямоугольника больше 10000" << flush;
+		return 3;
+	}
+	if (figure.width > 10000)
+	{
+		out << "Ошибка! Ширина нового прямоугольника больше 10000" << flush;
+		return 4;
+	}
+
+	return 0;
+}
+
 #ifdef SPLICE_RECTANGLES_EASY_VERSION
 /*!
 * \fn Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangles)

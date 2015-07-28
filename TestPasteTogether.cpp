@@ -4,7 +4,7 @@
 #include <QPoint>
 #include <QList>
 
-#ifndef EASY
+#ifndef SPLICE_RECTANGLES_EASY_VERSION
 TestPasteTogether::TestPasteTogether(void)
 {
 }

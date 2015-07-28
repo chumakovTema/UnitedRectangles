@@ -1,7 +1,7 @@
 #include "TestPasteAllTogether.h"
 #include "UnitedRectangles.h"
 
-#ifndef EASY
+#ifndef SPLICE_RECTANGLES_EASY_VERSION
 TestPasteAllTogether::TestPasteAllTogether(void)
 {
 }

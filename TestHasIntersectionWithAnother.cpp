@@ -1,7 +1,7 @@
 #include "TestHasIntersectionWithAnother.h"
 #include "UnitedRectangles.h"
 
-#ifndef EASY
+#ifndef SPLICE_RECTANGLES_EASY_VERSION
 TestHasIntersectionWithAnother::TestHasIntersectionWithAnother(void)
 {
 }

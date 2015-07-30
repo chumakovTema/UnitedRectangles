@@ -1,11 +1,15 @@
 #include "TestPasteAllTogether.h"
 #include "UnitedRectangles.h"
 
-#ifndef SPLICE_RECTANGLES_EASY_VERSION
 TestPasteAllTogether::TestPasteAllTogether(void)
 {
 }
 
+TestPasteAllTogether::~TestPasteAllTogether(void)
+{
+}
+
+#ifndef SPLICE_RECTANGLES_EASY_VERSION
 void TestPasteAllTogether::ifNoContact (void)
 {
 	UnitedRectangles app;	// Открыть доступ к методам тестируемого класса
@@ -116,9 +120,5 @@ void TestPasteAllTogether::ifSevenRectangles (void)
 	data << intersections1 << intersections2;
 
 	QVERIFY2(app.pasteAllTogether(vect) == data, "Два прямоугольника пересекаются, а третий не соприкасается ни с одним из них - тест не пройден!");
-}
-
-TestPasteAllTogether::~TestPasteAllTogether(void)
-{
 }
 #endif

@@ -4,11 +4,15 @@
 #include <QPoint>
 #include <QList>
 
-#ifndef SPLICE_RECTANGLES_EASY_VERSION
 TestPasteTogether::TestPasteTogether(void)
 {
 }
 
+TestPasteTogether::~TestPasteTogether(void)
+{
+}
+
+#ifndef SPLICE_RECTANGLES_EASY_VERSION
 void TestPasteTogether::ifContactOneEdge (void)
 {
 	UnitedRectangles app;	// Открыть доступ к методам тестируемого класса
@@ -193,9 +197,5 @@ void TestPasteTogether::ifConcurWitnOther (void)
 	const int count = 2;
 
 	QVERIFY2(app.pasteTogether(data, count) == points, "Прямоугольники совпадают - тест не пройден!");
-}
-
-TestPasteTogether::~TestPasteTogether(void)
-{
 }
 #endif

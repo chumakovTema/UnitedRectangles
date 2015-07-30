@@ -1,11 +1,15 @@
 #include "TestHasIntersectionWithAnother.h"
 #include "UnitedRectangles.h"
 
-#ifndef SPLICE_RECTANGLES_EASY_VERSION
 TestHasIntersectionWithAnother::TestHasIntersectionWithAnother(void)
 {
 }
 
+TestHasIntersectionWithAnother::~TestHasIntersectionWithAnother(void)
+{
+}
+
+#ifndef SPLICE_RECTANGLES_EASY_VERSION
 void TestHasIntersectionWithAnother::ifNoContactAndOneOutOfOther (void)
 {
 	UnitedRectangles app;	// ќткрыть доступ к методам тестируемого класса
@@ -277,9 +281,5 @@ void TestHasIntersectionWithAnother::ifConcurWitnOther (void)
 	data.append(intersections);	// ѕоложить еЄ в двумерный вектор
 
 	QVERIFY2(app.hasIntersectionWithAhother(first, 0, second, 1) == data, "ѕр€моугольники соприкасаютс€, один находитс€ внутри другого, противоположные стороны одного пр€моугольника €вл€ютс€ общими дл€ соответствующих сторон другого - тест не пройден!");
-}
-
-TestHasIntersectionWithAnother::~TestHasIntersectionWithAnother(void)
-{
 }
 #endif

@@ -70,7 +70,7 @@ void TestHasIntersectionWithAnother::ifContactOneTop (void)
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(0, 0);	// Положить точки контакта в список
+	list << QPoint(0, 0);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, false, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -95,7 +95,7 @@ void TestHasIntersectionWithAnother::ifContactOneEdge (void)
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(-1, 1) << QPoint::QPoint(1, 1);	// Положить точки контакта в список
+	list << QPoint(-1, 1) << QPoint(1, 1);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -120,7 +120,7 @@ void TestHasIntersectionWithAnother::ifCrossOneEdge (void)
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(1, -1) << QPoint::QPoint(1, 2);	// Положить точки контакта в список
+	list << QPoint(1, -1) << QPoint(1, 2);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -145,7 +145,7 @@ void TestHasIntersectionWithAnother::ifCrossTwoAdjacentEdges (void)
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(-1, 1) << QPoint::QPoint(1, -1);	// Положить точки контакта в список
+	list << QPoint(-1, 1) << QPoint(1, -1);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -170,7 +170,7 @@ void TestHasIntersectionWithAnother::ifCrossAnotherThrough (void)
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(-2, 1) << QPoint::QPoint(0, 1) << QPoint::QPoint(0, -1) << QPoint::QPoint(-2, -1);	// Положить точки контакта в список
+	list << QPoint(-2, 1) << QPoint(0, 1) << QPoint(0, -1) << QPoint(-2, -1);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -195,7 +195,7 @@ void TestHasIntersectionWithAnother::ifContactAndOneInOtherAndOneDimensionLess (
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(-2, -1) << QPoint::QPoint(1, -1) << QPoint::QPoint(1, -3) << QPoint::QPoint(-2, -3);	// Положить точки контакта в список
+	list << QPoint(-2, -1) << QPoint(1, -1) << QPoint(1, -3) << QPoint(-2, -3);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -220,7 +220,7 @@ void TestHasIntersectionWithAnother::ifContactAndOneInOtherAndBothDimensionsLess
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(0, 3) << QPoint::QPoint(3, 3) << QPoint::QPoint(3, 0);	// Положить точки контакта в список
+	list << QPoint(0, 3) << QPoint(3, 3) << QPoint(3, 0);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -245,7 +245,7 @@ void TestHasIntersectionWithAnother::ifContactTwoOppositeEdgesAndOneInOther (voi
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(-1, 2) << QPoint::QPoint(1, 2) << QPoint::QPoint(1, -2) << QPoint::QPoint(-1, -2);	// Положить точки контакта в список
+	list << QPoint(-1, 2) << QPoint(1, 2) << QPoint(1, -2) << QPoint(-1, -2);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);
@@ -270,7 +270,7 @@ void TestHasIntersectionWithAnother::ifConcurWitnOther (void)
 
 	QList <QPoint> list;	// Подготовить список точек
 	list.clear();			// Опустошить список
-	list << QPoint::QPoint(-2, -1) << QPoint::QPoint(-2, 2) << QPoint::QPoint(1, 2) << QPoint::QPoint(1, -1);	// Положить точки контакта в список
+	list << QPoint(-2, -1) << QPoint(-2, 2) << QPoint(1, 2) << QPoint(1, -1);	// Положить точки контакта в список
 
 	map = Intersection(0, 1, true, list);	// Подготовить карту пересечений
 	intersections.append(map);

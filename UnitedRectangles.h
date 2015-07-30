@@ -11,7 +11,7 @@
 #include "Intersection.h"
 
 /*!
-* class UnitedRectangles
+* \class UnitedRectangles
 * Рабочий класс
 */
 class UnitedRectangles

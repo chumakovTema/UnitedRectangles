@@ -61,10 +61,10 @@ QVector<QPoint> UnitedRectangles::getTops (Rectangle it)
 	QVector <QPoint> tops;
 	QPoint first, second, third, fourth;
 
-	first = QPoint::QPoint (it.x, it.y);
-	second = QPoint::QPoint (it.x + it.length, it.y);
-	third = QPoint::QPoint (it.x, it.y + it.width);
-	fourth = QPoint::QPoint (it.x + it.length, it.y + it.width);
+	first = QPoint (it.x, it.y);
+	second = QPoint (it.x + it.length, it.y);
+	third = QPoint (it.x, it.y + it.width);
+	fourth = QPoint (it.x + it.length, it.y + it.width);
 
 	tops << first << second << third << fourth;
 	return tops;
@@ -194,10 +194,10 @@ Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangle
 	Rectangle result;	/**< Rectangle result - полученный новый прямоугольник */
 
 	QVector <QPoint> points;	// Вектор вершин нового прямоугольника
-	QPoint A = QPoint::QPoint(rectangles.at(0).x, rectangles.at(0).y);	// Левая нижняя вершина
-	QPoint B = QPoint::QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y);// Правая нижняя вершина
-	QPoint C = QPoint::QPoint(rectangles.at(0).x, rectangles.at(0).y + rectangles.at(0).width);	// Левая верхняя вершина
-	QPoint D = QPoint::QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y + rectangles.at(0).width);	// Правая верхняя вершина
+	QPoint A = QPoint(rectangles.at(0).x, rectangles.at(0).y);	// Левая нижняя вершина
+	QPoint B = QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y);// Правая нижняя вершина
+	QPoint C = QPoint(rectangles.at(0).x, rectangles.at(0).y + rectangles.at(0).width);	// Левая верхняя вершина
+	QPoint D = QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y + rectangles.at(0).width);	// Правая верхняя вершина
 
 	for (int i = 0; i < rectangles.count(); i++)	// Рассматривая каждый прямоугольник...
 	{	// Определить, где будут вершины нового прямоугольника
@@ -361,7 +361,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec[0].x(), firstRec[0].y()) << QPoint::QPoint(secondRec[1].x(), firstRec[0].y()) << QPoint::QPoint(firstRec[0].x(), secondRec[2].y());
+		temp.intersection << QPoint(firstRec[0].x(), firstRec[0].y()) << QPoint(secondRec[1].x(), firstRec[0].y()) << QPoint(firstRec[0].x(), secondRec[2].y());
 
 		line << temp;
 		map << line;
@@ -372,7 +372,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(secondRec[0].x(), firstRec[1].y()) << QPoint::QPoint(firstRec[1].x(), firstRec[1].y()) << QPoint::QPoint(firstRec[1].x(), secondRec[3].y());
+		temp.intersection << QPoint(secondRec[0].x(), firstRec[1].y()) << QPoint(firstRec[1].x(), firstRec[1].y()) << QPoint(firstRec[1].x(), secondRec[3].y());
 
 		line << temp;
 		map << line;
@@ -383,7 +383,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec[2].x(), secondRec[0].y()) << QPoint::QPoint(firstRec[2].x(), firstRec[2].y()) << QPoint::QPoint(secondRec[3].x(), firstRec[2].y());
+		temp.intersection << QPoint(firstRec[2].x(), secondRec[0].y()) << QPoint(firstRec[2].x(), firstRec[2].y()) << QPoint(secondRec[3].x(), firstRec[2].y());
 
 		line << temp;
 		map << line;
@@ -394,7 +394,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint::QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint::QPoint(firstRec[3].x(), firstRec[3].y());
+		temp.intersection << QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint(firstRec[3].x(), firstRec[3].y());
 
 		line << temp;
 		map << line;
@@ -405,7 +405,7 @@ QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rec
 		temp.baseIndex = current;
 		temp.secondIndex = second;
 		temp.sign = true;
-		temp.intersection << QPoint::QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint::QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint::QPoint(firstRec[3].x(), firstRec[3].y());
+		temp.intersection << QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint(firstRec[3].x(), firstRec[3].y());
 
 		line << temp;
 		map << line;

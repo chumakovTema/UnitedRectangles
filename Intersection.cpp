@@ -19,7 +19,7 @@ Intersection::Intersection(void)
 */
 bool Intersection::operator == (const Intersection & other)
 {
-	return baseIndex == other.baseIndex && secondIndex == other.secondIndex && sign == other.sign && intersection == other.intersection;
+	return baseIndex == other.baseIndex && secondIndex == other.secondIndex && sign == other.sign;
 }
 
 /*!
@@ -30,12 +30,11 @@ bool Intersection::operator == (const Intersection & other)
 * \param [in] S - признак пересечения или соприкосновения прямоугольников
 * \param [in] INT - список точек, в которых прямоугольники пересекаются
 */
-Intersection::Intersection (int I1, int I2, bool S, QList <QPoint> INT)
+Intersection::Intersection (int I1, int I2, bool S)
 {
 	Intersection::baseIndex = I1;
 	Intersection::secondIndex = I2;
 	Intersection::sign = S;
-	Intersection::intersection = INT;
 }
 
 /*!

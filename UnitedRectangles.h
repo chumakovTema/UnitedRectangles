@@ -38,39 +38,27 @@ public:
 	//!
 	//! Проверка диапазона выходных данных
 	//!
-	int correctOutput (Rectangle  & figure);
-
-#ifdef SPLICE_RECTANGLES_EASY_VERSION	// Компиляция лёгкого решения
-	//!
-	//! Склейка прямоугольников в один
-	//!
-	Rectangle pasteAllTogetherEasy (QVector<Rectangle> & rectangles);
+	int correctOutput (QVector<Rectangle> & figure);
 
 	//!
-	//! Запись данных в файл
+	//!	Составление карты пересечений
 	//!
-	void writeResultEasy (Rectangle & figure);
-#else		// Компиляция сложного решения, режима отладки или тестового режима
-	//!
-	//! Склейка прямоугольников в одну фигуру
-	//!
-	QVector<QVector<QPoint>> pasteAllTogether (QVector<Rectangle> & rectangles);
+	QVector<QVector<int>> hasIntersectionWithAhother (QVector <Rectangle> & rectangles);
 
 	//!
-	//! Получение карты пересечений прямоугольников
+	//! Склейка прямоугольников в новые
 	//!
-	QVector<QVector<Intersection>> hasIntersectionWithAhother (Rectangle first, int num1, Rectangle other, int num2);
+	QVector<Rectangle> pasteTogether (QVector<Rectangle> & figure, QVector<QVector<int>> & newMap);
 
 	//!
-	//! Склейка двух прямоугольников
+	//! Пересборка карты, если в её паралелях есть повторяющиеся элементы
 	//!
-	QVector<QVector<QPoint>> pasteTogether (QVector<QVector<Intersection>> & intersections, const int count);
+	void rebuildMap (QVector<QVector<int>> & map);
 
 	//!
-	//! Запись данных в файл
+	//! Запись полученных прямоугольников в файл
 	//!
-	void writeResult (QVector<QVector<QPoint>> & figures);
-#endif
+	void writeResult (QVector<Rectangle>  & newFigures);
 };
 
 //!

@@ -4,17 +4,6 @@
 #include <QtCore/QCoreApplication>
 #include <QtTest/QtTest>
 #include "UnitedRectangles.h"
-#include "TestHasIntersectionWithAnother.h"
-#include "TestPasteTogether.h"
-#include "TestPasteAllTogether.h"
-
-//!
-//! SPLICE_RECTANGLES_EASY_VERSION - макрос, открывающий или закрывающий доступ к облегчённому варианту решения
-//!
-
-//!
-//! TEST - макрос, открывающий доступ к модульному тестированию.
-//!
 
 /*!
 * \fn int main(int argc, char *argv[])
@@ -26,26 +15,12 @@
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
+	UnitedRectangles app;				// Открыть доступ к методам класса задачи
 
-#ifdef TEST
-	TestHasIntersectionWithAnother first;
-	QTest::qExec (&first);
-
-	TestPasteTogether second;
-	QTest::qExec (&second);
-
-	TestPasteAllTogether third;
-	QTest::qExec (&third);
-
-	return 0;
-#endif
-
-	UnitedRectangles app;			// Открыть доступ к методам класса задачи
 	QVector<Rectangle> rectangles;	/**< QVector<Rectangle> rectangles - Вектор многоугольников - вход */
-	int error = 0;
-
-#ifdef SPLICE_RECTANGLES_EASY_VERSION
-	Rectangle resultEasy;		/**< Rectangle resultEasy - Конечный прямоугольник - результат */
+	QVector<QVector<int>> map;		/**< QVector<QVector<Intersection>> map - Двумерный вектор пересечений многоугольников; карта */
+	int error = 0;					/**< int error - Код ошибки при проверке входных/выходных данных */
+	QVector<Rectangle> result;		/**< QVector<Rectangle> resultEasy - Вектор конечных прямоугольников - результат */
 
 	rectangles = app.readData ();	// Считать многоугольники из файла
 	if (rectangles.count() == 0)	// Если нет прямоугольников, то...
@@ -59,34 +34,17 @@ int main(int argc, char *argv[])
 		return 2;	// Ошибка
 	}
 
-	resultEasy = app.pasteAllTogetherEasy (rectangles);	// Склеить все прямоугольники в один
-	error = app.correctOutput (resultEasy);
-	if (error != 0)	// Если странные выходные данные, то...
+	map = app.hasIntersectionWithAhother(rectangles);	// Получить карту пересечений прямоугольников
+	app.rebuildMap(map);	// Перестроить карту
+	result = app.pasteTogether(rectangles, map);	// Склеить прямоугольники между собой
+
+	error = app.correctOutput(result);	// Проверить диапазон выходных данных
+	if (error != 0)	// Если данные вне допустимого диапазона, то...
 	{
-		return 3;	// Ошибка
+		return 2;	// Ошибка
 	}
 
-	app.writeResultEasy (resultEasy);	// Записать результат в файл
+	app.writeResult(result);
 
 	return 0;	// Всё нормально
-#else
-	QVector<QVector<QPoint>> result;/**< QVector<QVector<QPoint>> - Вектор фигур - результат */
-
-	rectangles = app.readData ();	// Считать многоугольники из файла
-	if (rectangles.count() == 0)	// Если нет прямоугольников, то...
-	{
-		return 1;	// Ошибка
-	}
-
-	error = app.correctInput (rectangles);	// Проверить диапазон входных данных
-	if (error != 0)	// Если данные вне допустимого диапазона, то...
-	{
-		return 2;	// Ошибка
-	}
-
-	result = app.pasteAllTogether (rectangles);	// Получить список объединённых прямоугольников
-	app.writeResult (result);		// Записать результат в файл
-
-	return 0;
-#endif
 }

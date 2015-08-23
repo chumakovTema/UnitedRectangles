@@ -3,10 +3,6 @@
 //!
 #include "UnitedRectangles.h"
 
-//!
-//! SPLICE_RECTANGLES_EASY_VERSION - макрос, открывающий или закрывающий доступ к облегчённому варианту решения
-//!
-
 /*!
 * \fn UnitedRectangles::UnitedRectangles(void)
 * Конструктор по умолчанию
@@ -113,6 +109,7 @@ QVector <Rectangle> UnitedRectangles::readData ()
 int UnitedRectangles::correctInput (QVector <Rectangle> & rectangles)
 {
 	int count = rectangles.count();
+	int err = 0;
 	QTextStream out (stdout);
 
 	for (int i = 0; i < count; i++)
@@ -121,27 +118,27 @@ int UnitedRectangles::correctInput (QVector <Rectangle> & rectangles)
 		{
 			out << "Ошибка! Координата-абсцисса базовой точки прямоугольника " << i << " равна " << rectangles[i].x << flush;
 			out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
-			return 1;
+			err = 1;
 		}
 		if (rectangles[i].y > 10000 || rectangles[i].y < -10000)
 		{
 			out << "Ошибка! Координата-ордината базовой точки прямоугольника " << i << " равна " << rectangles[i].y << flush;
 			out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
-			return 2;
+			err = 2;
 		}
 		if (rectangles[i].length > 10000)
 		{
 			out << "Ошибка! Длина прямоугольника " << i << " больше 10000" << flush;
-			return 3;
+			err = 3;
 		}
 		if (rectangles[i].width > 10000)
 		{
 			out << "Ошибка! Ширина прямоугольника " << i << " больше 10000" << flush;
-			return 4;
+			err = 4;
 		}
 	}
 
-	return 0;
+	return err;
 }
 
 /*!
@@ -150,325 +147,325 @@ int UnitedRectangles::correctInput (QVector <Rectangle> & rectangles)
 * \param [in] figure - ссылка на новый прямоугольник
 * \return код ошибки
 */
-int UnitedRectangles::correctOutput (Rectangle & figure)
+int UnitedRectangles::correctOutput (QVector<Rectangle> & figure)
 {
 	QTextStream out (stdout);
+	int err = 0;
 
-	if (figure.x > 10000 || figure.x < -10000)
+	for (int i = 0; i < figure.count(); i++)
 	{
-		out << "Ошибка! Координата-абсцисса базовой точки нового прямоугольника равна " << figure.x << flush;
-		out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
-		out << "Убедитесь в правильности введённых входных данных" << flush;
-		return 1;
-	}
-	if (figure.y > 10000 || figure.y < -10000)
-	{
-		out << "Ошибка! Координата-ордината базовой точки нового прямоугольника равна " << figure.y << flush;
-		out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
-		out << "Убедитесь в правильности введённых входных данных" << flush;
-		return 2;
-	}
-	if (figure.length > 10000)
-	{
-		out << "Ошибка! Длина нового прямоугольника больше 10000" << flush;
-		return 3;
-	}
-	if (figure.width > 10000)
-	{
-		out << "Ошибка! Ширина нового прямоугольника больше 10000" << flush;
-		return 4;
+		if (figure[i].x > 10000 || figure[i].x < -10000)
+		{
+			out << "Ошибка! Координата-абсцисса базовой точки нового прямоугольника " << i << " равна " << figure[i].x << flush;
+			out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
+			out << "Убедитесь в правильности введённых входных данных" << flush;
+			err = 1;
+		}
+		if (figure[i].y > 10000 || figure[i].y < -10000)
+		{
+			out << "Ошибка! Координата-ордината базовой точки нового прямоугольника " << i << " равна " << figure[i].y << flush;
+			out << "Допустимый диапазон координат: [-10000; 10000]" << flush;
+			out << "Убедитесь в правильности введённых входных данных" << flush;
+			err = 2;
+		}
+		if (figure[i].length > 10000)
+		{
+			out << "Ошибка! Длина нового прямоугольника " << i << " больше 10000" << flush;
+			err = 3;
+		}
+		if (figure[i].width > 10000)
+		{
+			out << "Ошибка! Ширина нового прямоугольника " << i << " больше 10000" << flush;
+			err = 4;
+		}
 	}
 
-	return 0;
+	return err;
 }
 
-#ifdef SPLICE_RECTANGLES_EASY_VERSION
 /*!
-* \fn Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangles)
-* Объединение всех прямоугольников в один новый
-* \param [in] rectangles - ссылка на вектор прямоугольников
-* \return новый прямоугольников
+* \fn bool compareIndexes (QVector<int> & line)
+* Определение присутствия числа в векторе
+* \param [in] line - ссылка на текущую параллель карты
+* \param [in] num - индекс искомого прямоугольника
+* \return признак присутствия в параллели искомого индекса
 */
-Rectangle UnitedRectangles::pasteAllTogetherEasy (QVector<Rectangle> & rectangles)
+bool compareIndexes (QVector<int> & line, int num)
 {
-	Rectangle result;	/**< Rectangle result - полученный новый прямоугольник */
-
-	QVector <QPoint> points;	// Вектор вершин нового прямоугольника
-	QPoint A = QPoint(rectangles.at(0).x, rectangles.at(0).y);	// Левая нижняя вершина
-	QPoint B = QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y);// Правая нижняя вершина
-	QPoint C = QPoint(rectangles.at(0).x, rectangles.at(0).y + rectangles.at(0).width);	// Левая верхняя вершина
-	QPoint D = QPoint(rectangles.at(0).x + rectangles.at(0).length, rectangles.at(0).y + rectangles.at(0).width);	// Правая верхняя вершина
-
-	for (int i = 0; i < rectangles.count(); i++)	// Рассматривая каждый прямоугольник...
-	{	// Определить, где будут вершины нового прямоугольника
-		if (rectangles.at(i).x < A.x())
-		{
-			A.setX(rectangles.at(i).x);
-			if (rectangles.at(i).y < A.y())
-			{
-				A.setY(rectangles.at(i).y);
-			}
-		}
-		if (rectangles.at(i).x + rectangles.at(i).length > B.x())
-		{
-			B.setX(rectangles.at(i).x + rectangles.at(i).length);
-			if (rectangles.at(i).y < B.y())
-			{
-				B.setY(rectangles.at(i).y);
-			}
-		}
-		if (rectangles.at(i).x < C.x())
-		{
-			C.setX(rectangles.at(i).x);
-			if (rectangles.at(i).y + rectangles.at(i).width > C.y())
-			{
-				C.setY(rectangles.at(i).y + rectangles.at(i).width);
-			}
-		}
-		if (rectangles.at(i).x + rectangles.at(i).length > D.x())
-		{
-			D.setX(rectangles.at(i).x + rectangles.at(i).length);
-			if (rectangles.at(i).y + rectangles.at(i).width > D.y())
-			{
-				D.setY(rectangles.at(i).y + rectangles.at(i).width);
-			}
-		}
-	}
-
-	points << A << B << C << D;	// Записать полученные вершины в вектор
-	int Xmin = 0;
-	int Ymin = 0;
-	int Xmax = 0;
-	int Ymax = 0;
-	for (int i = 0; i < 4; i++)
-	{	// Выровнять стороны прямоугольника
-		if (points.at(i).x() < Xmin)
-		{
-			Xmin = points.at(i).x();
-		}
-		if (points.at(i).y() < Ymin)
-		{
-			Ymin = points.at(i).y();
-		}
-		if (points.at(i).x() > Xmax)
-		{
-			Xmax = points.at(i).x();
-		}
-		if (points.at(i).y() > Ymax)
-		{
-			Ymax = points.at(i).y();
-		}
-	}
-
-	result.x = Xmin;
-	result.y = Ymin;
-	result.length = Xmax - Xmin;
-	result.width = Ymax - Ymin;
-
-	return result;
-}
-
-/*!
-* \fn void UnitedRectangles::writeResultEasy (Rectangle & figure)
-* Запись результата в файл при облегчённом решении
-* \param [in] figure - ссылка на прямоугольник
-*/
-void UnitedRectangles::writeResultEasy (Rectangle & figure)
-{
-	QFile File ("result.txt");	// Привязать файл к его имени
-	if (File.open(QIODevice::WriteOnly | QIODevice::Truncate))	// Открыть файл для записи
+	bool index = false;
+	for (int k = 0; k < line.count() && index != true; k++)	// Проверить, что в параллели ещё нет индекса, равного j
 	{
-		QTextStream Out(&File);	// Создать поток
-		Out << figure.x << " " << figure.y << " " << figure.length << " " << figure.width;
-		File.close();			// Закрыть файл
-	}
-}
-#else
-/*!
-* \fn QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> & rectangles)
-* Объединение всех прямоугольников в одну новую фигуру
-* \param [in] rectangles - ссылка на вектор прямоугольников
-* \return вектор полученных фигур
-*/
-QVector<QVector<QPoint>> UnitedRectangles::pasteAllTogether (QVector<Rectangle> & rectangles)
-{
-	QVector<QVector<QPoint>> figures;	/**< QVector<QVector<QPoint>> figures - Вектор фигур, результат */
-
-	int count = rectangles.count();	// Получить количество прямоугольников
-	QVector<QVector<Intersection>> intersections;	/**< QVector<QVector<Intersection>> intersections - Карта пересечений прямоугольников */
-
-	for (int i = 0; i < count; i++)	// Для каждого прямоугольника...
-	{
-		for (int j = 0; j < count; j++)	// Кроме текущего взятого...
+		if (line[k] != num)
 		{
-			if (i != j)	// Если номер первого не совпадает с номером второго...
+			index = false;
+		}
+		else
+		{
+			index = true;
+		}
+	}
+	return index;
+}
+
+/*!
+* \fn bool searchInOtherLines (QVector<QVector<int>> & map, int num)
+* Определение присутствия числа в карте
+* \param [in] map - ссылка на карту
+* \param [in] num - индекс искомого прямоугольника
+* \return признак присутствия в карте искомого индекса
+*/
+bool searchInOtherLines (QVector<QVector<int>> & map, int num)
+{
+	bool index = false;
+	for (int i = 0; i < map.count() && index != true; i++)
+	{
+		for (int j = 0; j < map[i].count() && index != true; j++)
+		{
+			if (map[i][j] != num)
 			{
-				intersections = hasIntersectionWithAhother (rectangles.at(i), i, rectangles.at(j), j);// Найти пересечение
+				index = false;
+			}
+			else
+			{
+				index = true;
 			}
 		}
-
-		figures = pasteTogether (intersections, count);	// Склеить многоугольники // А ЗДЕСЬ ЛИ ЭТО ДЕЙСТВИЕ???
 	}
-
-	return figures;
+	return index;
 }
 
 /*!
-* \fn QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rectangle first, int current, Rectangle other, int second)
+* \fn QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (QVector <Rectangle> & rectangles)
 * Составление карты пересечений прямоугольников
-* \param [in] first - первый прямоугольник
-* \param [in] current - его индекс в списке прямоугольников
-* \param [in] other - второй прямоугольник
-* \param [in] second - его индекс в списке прямоугольников
+* \param [in] rectangles - список прямоугольников
 * \return карта пересечений прямоугольников
 */
-QVector<QVector<Intersection>> UnitedRectangles::hasIntersectionWithAhother (Rectangle first, int current, Rectangle other, int second)
+QVector<QVector<int>> UnitedRectangles::hasIntersectionWithAhother (QVector <Rectangle> & rectangles)
 {
-	QVector<QVector<Intersection>> map;	/**< QVector<QVector<Intersection>> map - Карта пересечений */
-	QVector<Intersection> line;		// Строка в карте
+	QVector<QVector<int>> map;	// Карта пересечений
+	QVector<int> line;			// Параллель в карте
+	int count = rectangles.count();	// Количество прямоугольников
+	bool isIndex = false;	// Признак присутствия числа в векторе
+	bool inMap = false;		// Признак присутствия числа в карте
 
-	QVector <QPoint> firstRec;
-	QVector <QPoint> secondRec;
-	firstRec = getTops (first);		// Получить вершины первого прямоугольника
-	secondRec = getTops (other);	// Получить вершины второго прямоугольника
-
-	// Проверка пересечения
-	if ((secondRec[0].x() > firstRec[0].x() && secondRec[0].y() > firstRec[0].y()) && (secondRec[3].x() < firstRec[3].x() && secondRec[3].y() < firstRec[3].y())) // Второй внутри первого
+	line.clear();
+	for (int i = 0; i < count; i++)	// Для каждого прямоугольника...
 	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = false;
-		temp.intersection.clear();
+		inMap = searchInOtherLines (map, i);	// Проверить, что в карте нет i-го прямоугольника
+		if (inMap == false)	// Если его нет, то...
+		{
+			line.append(i);	// Начать новую параллель с числа i
+		}
 
-		line << temp;
-		map << line;
-	}
-	else if (secondRec[0].x() > firstRec[1].x() || secondRec[0].y() > firstRec[3].y() || secondRec[3].x() < firstRec[0].x() || secondRec[3].y() < firstRec[0].y())	// Второй вне первого
-	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = false;
-		temp.intersection.clear();
-
-		line << temp;
-		map << line;
-	}
-	else if (secondRec[0] == firstRec[0] && other.length < first.length && other.width < first.width) // Левые нижние углы соприкасаются
-	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = true;
-		temp.intersection << QPoint(firstRec[0].x(), firstRec[0].y()) << QPoint(secondRec[1].x(), firstRec[0].y()) << QPoint(firstRec[0].x(), secondRec[2].y());
-
-		line << temp;
-		map << line;
-	}
-	else if (secondRec[1] == firstRec[1] && other.length < first.length && other.width < first.width) // Правые нижние углы соприкасаются
-	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = true;
-		temp.intersection << QPoint(secondRec[0].x(), firstRec[1].y()) << QPoint(firstRec[1].x(), firstRec[1].y()) << QPoint(firstRec[1].x(), secondRec[3].y());
-
-		line << temp;
-		map << line;
-	}
-	else if (secondRec[2] == firstRec[2] && other.length < first.length && other.width < first.width) // Левые верхние углы соприкасаются
-	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = true;
-		temp.intersection << QPoint(firstRec[2].x(), secondRec[0].y()) << QPoint(firstRec[2].x(), firstRec[2].y()) << QPoint(secondRec[3].x(), firstRec[2].y());
-
-		line << temp;
-		map << line;
-	}
-	else if (secondRec[3] == firstRec[3] && other.length < first.length && other.width < first.width) // Правые верхние углы соприкасаются
-	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = true;
-		temp.intersection << QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint(firstRec[3].x(), firstRec[3].y());
-
-		line << temp;
-		map << line;
-	}
-	else if (secondRec[0].x() == firstRec[0].x() && secondRec[0].y() > firstRec[0].y() && other.length == first.length && other.width < (first.width - (secondRec[0].y() - firstRec[0].y()) - (firstRec[3].y() - secondRec[3].y()))) // Правые верхние углы соприкасаются
-	{
-		Intersection temp;
-		temp.baseIndex = current;
-		temp.secondIndex = second;
-		temp.sign = true;
-		temp.intersection << QPoint(firstRec[3].x(), secondRec[1].y()) << QPoint(secondRec[2].x(), firstRec[3].y()) << QPoint(firstRec[3].x(), firstRec[3].y());
-
-		line << temp;
-		map << line;
+		if (line.count() > 0)
+		{
+			for (int j = 0; j < count; j++)	// Для каждого прямоугольника...
+			{
+				if (i != j)	// Если индексы определяемых прямоугольников не равны...
+				{
+					if (rectangles[j].x >= rectangles[i].x && rectangles[j].y >= rectangles[i].y)	// Если j-ый прямоугольник в секторе i-го...
+					{
+						if (rectangles[i].x + rectangles[i].length >= rectangles[j].x && rectangles[i].y + rectangles[i].width >= rectangles[j].y)	// Если j-ый внутри i-го
+						{
+							isIndex = compareIndexes(line, j);
+							if (isIndex == false)
+							{
+								line.append(j);
+							}
+						}
+					}
+					else if (rectangles[j].x < rectangles[i].x || rectangles[j].y < rectangles[i].y)	// Если j-ый прямоугольник вне cектора i-го...
+					{
+						if (rectangles[j].y >= rectangles[i].y)	// Если j-ый прямоугольник в cекторе слева i-го...
+						{
+							if (rectangles[j].x + rectangles[j].length >= rectangles[i].x && rectangles[j].y <= rectangles[i].y + rectangles[i].width)
+							{
+								isIndex = compareIndexes(line, j);
+								if (isIndex == false)
+								{
+									line.append(j);
+								}
+							}
+						}
+						else if (rectangles[j].x >= rectangles[i].x)	// Если j-ый прямоугольник в cекторе снизу i-го...
+						{
+							if (rectangles[j].y + rectangles[j].width >= rectangles[i].y && rectangles[j].x <= rectangles[i].x + rectangles[i].length)
+							{
+								isIndex = compareIndexes(line, j);
+								if (isIndex == false)
+								{
+									line.append(j);
+								}
+							}
+						}
+						else	// Если j-ый прямоугольник в секторе слева-снизу i-го...
+						{
+							if (rectangles[j].y + rectangles[j].width >= rectangles[i].y && rectangles[j].x + rectangles[j].length >= rectangles[i].x)
+							{
+								isIndex = compareIndexes(line, j);
+								if (isIndex == false)
+								{
+									line.append(j);
+								}
+							}
+						}
+					}
+				}
+			}
+		map.append(line);
+		line.clear();
+		}
 	}
 
 	return map;
 }
 
 /*!
-* \fn QVector<QVector<QPoint>> UnitedRectangles::pasteTogether (QVector<QVector<Intersection>> & intersections, const int count)
-* Склейка двух прямоугольников
-* \param [in] intersections - ссылка на карту пересечений
-* \param [in] count - количество прямоугольников
-* \return вектор фигур
+* \fn void UnitedRectangles::rebuildMap (QVector<QVector<int>> & map)
+* Пересборка карты, если в её паралелях есть повторяющиеся элементы
+* \param [in, out] map - ссылка на карту
 */
-QVector<QVector<QPoint>> UnitedRectangles::pasteTogether (QVector<QVector<Intersection>> & intersections, const int count)
+void UnitedRectangles::rebuildMap (QVector<QVector<int>> & map)
 {
-	QVector<QVector<QPoint>> figures;	/**< QVector<QVector<QPoint>> figures - Вектор фигур, результат */
-
-	for (int i = 0; i < count; i++)		// Для каждого прямоугольника
+	for (int i = 0; i < map.count(); i++)	// Взять элемент
 	{
-		int size = intersections[i].count();// Получить длину строки карты
-		for (int j = 0; j < size; j++)		// Для каждого элемента карты...
+		for (int j = 0; j < map[i].count(); j++)
 		{
-			if (intersections[i][j].sign == true)	// Если прямоугольники пересекаются или соприкасаются...
+			for (int k = i + 1; k < map.count(); k++)	// Взять элемент, с которым сравнивать первый
 			{
-				// Склеить их
+				for (int l = 0; l < map[k].count(); l++)
+				{
+					if (map[i][j] == map[k][l])	// Если они равны, то...
+					{
+						for (int m = 0; m < map[k].count(); m++)
+						{
+							if (map[i][j] != map[k][m])
+							{
+								map[i].append(map[k][m]);	// Переписать все индексы, кроме сравниваемого в первую параллель...
+							}
+						}
+						map.remove(k);	// А вторую стереть
+						i = 0;	// Начать с начала карты
+						j = 0;
+					}
+				}
 			}
 		}
 	}
-
-	return figures;
 }
 
 /*!
-* \fn void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
-* Запись полученных фигур в файл
-* \param [in] figures - ссылка на вектор полученных фигур
+* \fn QVector<Rectangle> UnitedRectangles::pasteTogether (QVector<Rectangle> & figure, QVector<QVector<int>> & newMap)
+* Склейка прямоугольников в новые
+* \param [in] figure - ссылка на вектор исходных прямоугольников
+* \param [in] newMap - ссылка на конвертированную карту пересечений
+* \return вектор новых прямоугольников
 */
-void UnitedRectangles::writeResult (QVector<QVector<QPoint>> & figures)
+QVector<Rectangle> UnitedRectangles::pasteTogether (QVector<Rectangle> & figure, QVector<QVector<int>> & newMap)
 {
-	QFile File ("result.txt");	// Привязать файл к его имени
-	if (File.open(QIODevice::WriteOnly | QIODevice::Truncate))	// Открыть файл для записи
+	QVector<Rectangle> newRectangles;
+	QVector <QPoint> points;	// Вектор вершин нового прямоугольника
+	QPoint A, B, C, D;			// Временные точки, ограничивающие новый прямоугольник
+
+	for (int i = 0; i < newMap.count(); i++)	// Для каждой строки из карты...
 	{
-		QTextStream Out(&File);	// Создать поток
+		Rectangle temp;
 
-		int first = 0;	// Длина внешнего вектора
-		int second = 0;	// Длина внутреннего вектора
-
-		first = figures.count();	// Получить длину внешнего вектора
-
-		for (int i = 0; i < first; i++)	// Для каждого элемента внешнего вектора
+		A = QPoint(figure[newMap[i][0]].x, figure[newMap[i][0]].y);
+		B = QPoint(figure[newMap[i][0]].x + figure[newMap[i][0]].length, figure[newMap[i][0]].y);
+		C = QPoint(figure[newMap[i][0]].x, figure[newMap[i][0]].y + figure[newMap[i][0]].width);
+		D = QPoint(figure[newMap[i][0]].x + figure[newMap[i][0]].length, figure[newMap[i][0]].y + figure[newMap[i][0]].width);
+		for (int j = 1; j < newMap[i].count(); j++)	// Расширить прямоугольник в соответствии с картой...
 		{
-			second = figures.at(i).count();	// Получить длину внутреннего вектора
-			for (int j = 0; j < second; j++)// Для каждого элемента внутреннего вектора...
+			if (figure[newMap[i][j]].x < A.x())
 			{
-				Out << figures[i][j];	// Записать точку в поток
-				Out << " ";
+				A.setX(figure[newMap[i][j]].x);
+				if (figure[newMap[i][j]].y < C.y())
+				{
+					A.setY(figure[newMap[i][j]].y);
+				}
 			}
-			Out << "\r\n" << "\r\n";
+			if (figure[newMap[i][j]].x + figure[newMap[i][j]].length > A.x())
+			{
+				B.setX(figure[newMap[i][j]].x + figure[newMap[i][j]].length);
+				if (figure[newMap[i][j]].y < B.y())
+				{
+					B.setY(figure[newMap[i][j]].y);
+				}
+			}
+			if (figure[newMap[i][j]].x < D.x())
+			{
+				C.setX(figure[newMap[i][j]].x);
+				if (figure[newMap[i][j]].y + figure[newMap[i][j]].width > C.y())
+				{
+					C.setY(figure[newMap[i][j]].y + figure[newMap[i][j]].width);
+				}
+			}
+			if (figure[newMap[i][j]].x + figure[newMap[i][j]].length > D.x())
+			{
+				D.setX(figure[newMap[i][j]].x + figure[newMap[i][j]].length);
+				if (figure[newMap[i][j]].y + figure[newMap[i][j]].width > B.y())
+				{
+					D.setY(figure[newMap[i][j]].y + figure[newMap[i][j]].width);
+				}
+			}
 		}
-		File.close();	// Закрыть файл
+
+		points << A << B << C << D;	// Записать полученные вершины в вектор
+		int Xmin = figure[newMap[i][0]].x;
+		int Ymin = figure[newMap[i][0]].y;
+		int Xmax = figure[newMap[i][0]].x;
+		int Ymax = figure[newMap[i][0]].y;
+		for (int i = 0; i < 4; i++)
+		{	// Выровнять стороны прямоугольника
+			if (points[i].x() < Xmin)
+			{
+				Xmin = points[i].x();
+			}
+			if (points[i].y() < Ymin)
+			{
+				Ymin = points[i].y();
+			}
+			if (points[i].x() > Xmax)
+			{
+				Xmax = points[i].x();
+			}
+			if (points[i].y() > Ymax)
+			{
+				Ymax = points[i].y();
+			}
+		}
+
+		temp.x = Xmin;
+		temp.y = Ymin;
+		temp.length = Xmax - Xmin;
+		temp.width = Ymax - Ymin;
+
+		newRectangles.append(temp);
+		points.clear();
 	}
+
+	return newRectangles;
 }
 
-#endif
+/*!
+* \fn void writeResult (QVector<Rectangle>  & newFigures)
+* Запись полученных прямоугольников в файл
+* \param [in] newFigures - ссылка на вектор новых прямоугольников
+*/
+void UnitedRectangles::writeResult (QVector<Rectangle>  & newFigures)
+{
+	QFile File("result.txt");	// Bindind file to name of file
+	
+	if (File.open(QIODevice::WriteOnly | QIODevice::Truncate))	// Opening file for reading
+	{
+		QTextStream Out (&File);
+
+		for (int i = 0; i < newFigures.count(); i++)
+		{
+			Out << newFigures[i].x << " " << newFigures[i].y << " " << newFigures[i].length << " " << newFigures[i].width << "\r\n";
+		}
+
+		File.close();
+	}
+}

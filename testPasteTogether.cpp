@@ -149,6 +149,43 @@ void testPasteTogether::secondInDownSector ()
 	QVERIFY2(test.pasteTogether(input, map) == output, "Слияние прямоугольника в нижнем секторе с первым прямоугольником - тест провален!");
 }
 
+void testPasteTogether::secondInFirstNoContact ()
+{
+	UnitedRectangles test;
+
+	QVector<Rectangle> input;	// Входной вектор прямоугольников
+	input << Rectangle(0, 0, 4, 4) << Rectangle(1, 1, 2, 2);
+
+	QVector<QVector<int>> map;	// Входная карта пересечений
+	QVector<int> line1, line2;
+	line1 << 0;
+	line2 << 1;
+	map << line1, line2;
+
+	QVector<Rectangle> output;
+	output << Rectangle(0, 0, 4, 4);
+
+	QVERIFY2(test.pasteTogether(input, map) == output, "Слияние одного прямоугольника, находящегося внутри второго - тест провален!");
+}
+
+void testPasteTogether::secondConsureFirst ()
+{
+	UnitedRectangles test;
+
+	QVector<Rectangle> input;	// Входной вектор прямоугольников
+	input << Rectangle(0, 0, 4, 4) << Rectangle(0, 0, 4, 4);
+
+	QVector<QVector<int>> map;	// Входная карта пересечений
+	QVector<int> line;
+	line << 0 << 1;
+	map << line;
+
+	QVector<Rectangle> output;
+	output << Rectangle(0, 0, 4, 4);
+
+	QVERIFY2(test.pasteTogether(input, map) == output, "Слияние совпадающих прямоугольников - тест провален!");
+}
+
 testPasteTogether::~testPasteTogether(void)
 {
 }
